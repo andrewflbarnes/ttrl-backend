@@ -1,0 +1,46 @@
+openapi: 3.0.1
+servers:
+- url: "https://www.andrewflbarnes.com/api/ttrl"
+info:
+  title: API for Ticket to Ride League
+  description: API for Ticket to Ride League
+  version: 1.0.0
+  contact:
+    email: info@andrewflbarnes.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+- name: default
+  description: Calls open for anyone
+paths:
+  /users:
+    get:
+      responses:
+        200:
+          description: 200 response containing user details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserList"
+components:
+  schemas:
+    UserItem:
+      required:
+      - name
+      type: "object"
+      properties:
+        name:
+          type: "string"
+        wins:
+          type: integer
+        losses:
+          type: integer
+        high:
+          type: integer
+        picture:
+          type: string
+    UserList:
+      type: "array"
+      items:
+        $ref: "#/components/schema/UserItem"

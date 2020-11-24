@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.aflb.ttrl</groupId>
+        <artifactId>ttrl-backend</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ttrl-api</artifactId>
+    <packaging>pom</packaging>
+
+    <name>TTRL API</name>
+
+    <modules>
+        <module>api-server</module>
+        <module>api-client</module>
+    </modules>
+
+    <properties>
+        <swagger-annotations-version>1.5.8</swagger-annotations-version>
+        <springfox-version>2.8.0</springfox-version>
+
+        <gen.package>com.aflb.ttrl.api</gen.package>
+
+        <api.server.package>${gen.package}.server</api.server.package>
+        <api.client.package>${gen.package}.client</api.client.package>
+        <api.spec>src/main/resources/api.yml</api.spec>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger-annotations-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        <!-- Bean Validation API support -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.openapitools</groupId>
+                    <artifactId>openapi-generator-maven-plugin</artifactId>
+                    <version>4.3.1</version>
+                    <configuration>
+                        <generatorName>spring</generatorName>
+                        <configOptions>
+                            <sourceFolder>src/gen/java/main</sourceFolder>
+                        </configOptions>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>generate</id>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!--<plugin>-->
+                <!--<groupId>org.openapitools</groupId>-->
+                <!--<artifactId>openapi-generator-maven-plugin</artifactId>-->
+                <!--&lt;!&ndash; RELEASE_VERSION &ndash;&gt;-->
+                <!--<version>4.3.1</version>-->
+                <!--&lt;!&ndash; /RELEASE_VERSION &ndash;&gt;-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>generate-client</id>-->
+                        <!--<goals>-->
+                            <!--<goal>generate</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<inputSpec>${project.basedir}/src/main/resources/api.yml</inputSpec>-->
+                            <!--<generatorName>spring</generatorName>-->
+                            <!--<configOptions>-->
+                                <!--<basePackage>${client.package}</basePackage>-->
+                                <!--<apiPackage>${client.package}.api</apiPackage>-->
+                                <!--<configPackage>${client.package}.config</configPackage>-->
+                                <!--<modelPackage>${client.package}.model</modelPackage>-->
+                                <!--<library>spring-cloud</library>-->
+                                <!--<sourceFolder>src/gen/java/main</sourceFolder>-->
+                            <!--</configOptions>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>generate-server</id>-->
+                        <!--<goals>-->
+                            <!--<goal>generate</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<inputSpec>${project.basedir}/src/main/resources/api.yml</inputSpec>-->
+                            <!--<generatorName>spring</generatorName>-->
+                            <!--<configOptions>-->
+                                <!--<basePackage>${server.package}</basePackage>-->
+                                <!--<apiPackage>${server.package}.api</apiPackage>-->
+                                <!--<configPackage>${server.package}.config</configPackage>-->
+                                <!--<modelPackage>${server.package}.model</modelPackage>-->
+                                <!--<library>spring-boot</library>-->
+                                <!--<sourceFolder>src/gen/java/main</sourceFolder>-->
+                            <!--</configOptions>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+        </plugins>
+    </build>
+</project>
+

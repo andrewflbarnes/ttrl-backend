@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ttrl-api</artifactId>
+        <groupId>com.aflb.ttrl</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ttrl-api-server</artifactId>
+
+    <name>TTRL API Server Stubs</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <configuration>
+                    <inputSpec>${project.parent.basedir}/${api.spec}</inputSpec>
+                    <configOptions>
+                        <basePackage>${api.server.package}</basePackage>
+                        <apiPackage>${api.server.package}.api</apiPackage>
+                        <configPackage>${api.server.package}.config</configPackage>
+                        <modelPackage>${api.server.package}.model</modelPackage>
+                        <library>spring-boot</library>
+                        <interfaceOnly>true</interfaceOnly>
+                        <delegatePattern>true</delegatePattern>
+                    </configOptions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
