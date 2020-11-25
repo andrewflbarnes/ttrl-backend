@@ -1,5 +1,6 @@
 package com.aflb.ttrl.server;
 
+import com.aflb.ttrl.server.api.ApiSecret;
 import com.aflb.ttrl.server.config.DaoProperties;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -27,21 +28,27 @@ public class Application {
     @Component("reporter")
     @Slf4j
     public static class Reporter {
-        public Reporter(BuildProperties buildProps, DaoProperties daoProps) {
+        public Reporter(BuildProperties buildProps, DaoProperties daoProps, ApiSecret secret) {
             final String version = buildProps.getVersion();
             final String commit = buildProps.getCommit();
             if (BuildProperties.UNKNOWN.equals(version) || BuildProperties.UNKNOWN.equals(commit)) {
-                log.warn("******** VERSION: {} ({})", version, commit);
+                log.warn("******** VERSION    : {} ({})", version, commit);
             } else {
-                log.info("******** VERSION: {} ({})", version, commit);
+                log.info("******** VERSION    : {} ({})", version, commit);
             }
 
             final String type = daoProps.getType();
             final String database = daoProps.getDatabase();
             if (DaoProperties.UNSET.equals(type)) {
-                log.warn("******** DAO:     {} ({})", type, database);
+                log.warn("******** DAO        : {} ({})", type, database);
             } else {
-                log.info("******** DAO:     {} ({})", type, database);
+                log.info("******** DAO        : {} ({})", type, database);
+            }
+
+            if (secret.isEnable()) {
+                log.info("******** SECURE API : enabled", type, database);
+            } else {
+                log.warn("******** SECURE API : disabled", type, database);
             }
         }
     }
