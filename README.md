@@ -2,77 +2,58 @@
 
 A backend server for returning results to the Ticket to Ride League (TTRL) page.
 
-Only exposes a dummy (hardcoded) DAO for now.
-
 See the [swagger spec](api/src/main/resources/api.yml) for details.
 
-```sql
-CREATE TABLE t_ttrl_users
-( name    VARCHAR(255) PRIMARY KEY  NOT NULL
-, high    INTEGER                   NOT NULL
-, wins    INTEGER                   NOT NULL
-, losses  INTEGER                   NOT NULL
-, picture VARCHAR(1023)
-);
+### Build
 
-CREATE VIEW ttrl_users AS
-SELECT name
-     , wins
-     , losses
-     , high
-     , picture
-  FROM t_ttrl_users
-;
+```bash
+mvn clean install
+```
 
-INSERT
-  INTO t_ttrl_users
-     ( name
-     , wins
-     , losses
-     , high
-     , picture
-     )
-VALUES 
-     ( 'Aidan Faria'
-     , 1
-     , 3
-     , 117
-     , 'https://scontent-lhr8-1.xx.fbcdn.net/v/t1.0-9/540614_10200626715614877_2102794417_n.jpg?_nc_cat=107&ccb=2&_nc_sid=de6eea&_nc_ohc=mABC6B70eL8AX_VBIVm&_nc_ht=scontent-lhr8-1.xx&oh=d9ca0a98cb65e55253ebd501503373da&oe=5FDA3833'
-     )
-;
+### Running
 
-INSERT
-  INTO t_ttrl_users
-     ( name
-     , wins
-     , losses
-     , high
-     , picture
-     )
-VALUES 
-     ( 'Andrew Barnes'
-     , 3
-     , 1
-     , 116
-     , 'https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/535630_10150763070332182_888848364_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=Qu8ZcYq-p58AX9mK5fo&_nc_ht=scontent-lht6-1.xx&oh=95c3abd9488c9ba4346a7c9973782e20&oe=5FDC5B58'
-     )
-;
+The backend can be run in a couple of ways
+- (TODO) Run the war/jar generated in the `spring-boot-standalone` module
+- Import the generated `ttrl-spring-boot-starter` lib into an existing Spring Boot application as a dependency
 
-INSERT
-  INTO t_ttrl_users
-     ( name
-     , wins
-     , losses
-     , high
-     , picture
-     )
-VALUES 
-     ( 'Mike Hutchings'
-     , 0
-     , 1
-     , 53
-     , 'https://scontent-lhr8-1.xx.fbcdn.net/v/t31.0-8/15195893_10207113262010697_1598240197302767699_o.jpg?_nc_cat=109&ccb=2&_nc_sid=cdbe9c&_nc_ohc=hKg6I7fevskAX-6SLhJ&_nc_ht=scontent-lhr8-1.xx&oh=72acd7b7a88c70a1a81f02540d15bd78&oe=5FDBC16D'
-     )
-;
+### Configuration
 
+**ttrl.dao.type**: the type of DAO classes to instantiate  
+`jdbc` - Enables JDBC in which case both an appropriate library and `sping.datasource.url` are expected  
+`<not set>` (default)  - A dummy DAO with hardcoded data is exposed
+
+**ttrl.dao.database**: the database type for JDBC - allows DB specific SQL loading from `src/main/resources/sql/<database>/`  
+`postgres` (default) - Postgres specific SQL
+
+NOTE: No DB libraries are provided by default in the `spring-boot-starter` module  
+
+### Local testing
+
+To test locally some SQL and a docker-compose file are provided for convenience. The [SQL](./test.sql) also reflects
+the expected table/view structure. By default the DB is exposed on port `5555` with `postgres` as the DB, username and
+password.
+
+```bash
+doocker-compose up -d
+
+psql -h localhost -p 5555 postgres postgres < test.sql
+```
+
+Running the test `Application` class in `spring-boot-starter` will start an instance running which connects to this DB.
+(TODO) Alternatively run the backend standalone or embedded with the below settings:
+```yaml
+spring:
+  datasource:
+    url: "jdbc:postgresql://localhost:5555/postgres?user=postgres&password=postgres"
+
+ttrl:
+  dao:
+    type: jdbc
+    database: postgres
+
+```
+
+User details can be retrieved using the below (port `8088` assuming the test `Application` class is used):
+```bash
+curl http://localhost:8088/users
 ```

@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ttrl-spring-boot</artifactId>
+    <artifactId>ttrl-spring-boot-starter</artifactId>
 
-    <name>TTRL Spring Boot</name>
+    <name>TTRL Spring Boot Starter</name>
 
     <dependencies>
         <dependency>
