@@ -1,7 +1,6 @@
 package com.aflb.ttrl.server;
 
-import com.aflb.ttrl.server.api.ApiSecret;
-import com.aflb.ttrl.server.config.DaoProperties;
+import com.aflb.ttrl.server.util.TtrlReporter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,28 +27,22 @@ public class Application {
     @Component("reporter")
     @Slf4j
     public static class Reporter {
-        public Reporter(BuildProperties buildProps, DaoProperties daoProps, ApiSecret secret) {
+
+        private static final String TEMPLATE = "******** %-20s: %s";
+
+        public Reporter(BuildProperties buildProps, TtrlReporter ttrlReporter) {
             final String version = buildProps.getVersion();
             final String commit = buildProps.getCommit();
+            final String versionLog = String.format(TEMPLATE,
+                    "VERSION",
+                    String.format("%s (%s)", version, commit));
             if (BuildProperties.UNKNOWN.equals(version) || BuildProperties.UNKNOWN.equals(commit)) {
-                log.warn("******** VERSION    : {} ({})", version, commit);
+                log.warn(versionLog);
             } else {
-                log.info("******** VERSION    : {} ({})", version, commit);
+                log.info(versionLog);
             }
 
-            final String type = daoProps.getType();
-            final String database = daoProps.getDatabase();
-            if (DaoProperties.UNSET.equals(type)) {
-                log.warn("******** DAO        : {} ({})", type, database);
-            } else {
-                log.info("******** DAO        : {} ({})", type, database);
-            }
-
-            if (secret.isEnable()) {
-                log.info("******** SECURE API : enabled", type, database);
-            } else {
-                log.warn("******** SECURE API : disabled", type, database);
-            }
+            ttrlReporter.report(TEMPLATE);
         }
     }
 
