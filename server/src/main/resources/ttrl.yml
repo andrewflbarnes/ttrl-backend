@@ -1,1 +1,5 @@
 spring.profiles.include: postgres
+
+ttrl.api.secret:
+  enable: ${TTRL_SECURE:true}
+  token: ${TTRL_TOKEN:TEST}
