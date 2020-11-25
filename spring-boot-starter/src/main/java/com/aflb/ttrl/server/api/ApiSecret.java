@@ -14,4 +14,10 @@ public class ApiSecret {
     public boolean validate(String check) {
         return !enable || token.equals(check);
     }
+
+    public void validateThrow(String check) {
+        if (enable && !token.equals(check)) {
+            throw new InvalidApiSecretException();
+        }
+    }
 }

@@ -39,6 +39,8 @@ paths:
               description: Location of the created resource
               schema:
                 type: string
+        401:
+          $ref: "#/components/responses/IncorrectSecretToken"
         409:
           description: User already exists
   /users/{discordId}:
@@ -58,8 +60,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserItem"
+        404:
+          description: User with discord ID not found
     put:
       operationId: updateUserFull
+      summary: Allows an update of all information for the user - creation is not supported (a 404 is returned)
       requestBody:
         content:
           application/json:
@@ -70,6 +75,10 @@ paths:
           description: User successfully updated
         400:
           $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/IncorrectSecretToken"
+        404:
+          description: User with discord ID not found
     patch:
       operationId: updateUser
       requestBody:
@@ -82,10 +91,18 @@ paths:
           description: User successfully updated
         400:
           $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/IncorrectSecretToken"
 components:
   responses:
     BadRequest:
       description: request submitted was invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    IncorrectSecretToken:
+      description: request contained an invalid secret token
       content:
         application/json:
           schema:
@@ -99,6 +116,10 @@ components:
         reason:
           type: string
           example: "Invalid discrod ID: sajkfghe80he3r0hi2e"
+        uuid:
+          type: string
+          format: UUID
+          example: 1289748921547457357
     UserOperation:
       type: object
       required:

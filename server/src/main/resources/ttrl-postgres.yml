@@ -4,6 +4,8 @@ spring:
     username: ${TTRL_DB_USER:postgres}
     password: ${TTRL_DB_PASS:postgres}
     driverClassName: org.postgresql.Driver
+    hikari:
+      connectionTimeout: 1000
 
 ttrl:
   dao:

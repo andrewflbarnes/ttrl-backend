@@ -5,6 +5,7 @@ import com.aflb.ttrl.server.users.UserDao;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class DummyUserDao implements UserDao {
 
@@ -38,37 +39,45 @@ public class DummyUserDao implements UserDao {
     }
 
     @Override
-    public UserItem getUser(String discordId) {
-        return null;
+    public Optional<UserItem> getUser(String discordId) {
+        return USERS.stream()
+                .filter(u -> discordId.equals(u.getDiscordId()))
+                .findAny();
+    }
+
+    @Override
+    public boolean isUserExists(String discordId) {
+        return USERS.stream()
+                .anyMatch(u -> discordId.equals(u.getDiscordId()));
     }
 
     @Override
     public boolean addUser(UserItem user) {
-        return false;
+        throw new UnsupportedOperationException("Adding users not supported");
     }
 
     @Override
     public boolean updateUser(UserItem user) {
-        return false;
+        throw new UnsupportedOperationException("Updating users not supported");
     }
 
     @Override
     public void incrementWins(String discordId) {
-
+        throw new UnsupportedOperationException("Updating users not supported");
     }
 
     @Override
     public void incrementLosses(String discordId) {
-
+        throw new UnsupportedOperationException("Updating users not supported");
     }
 
     @Override
     public void updateHighScore(String discordId, int score) {
-
+        throw new UnsupportedOperationException("Updating users not supported");
     }
 
     @Override
     public void updatePicture(String discordId, String picture) {
-
+        throw new UnsupportedOperationException("Updating users not supported");
     }
 }

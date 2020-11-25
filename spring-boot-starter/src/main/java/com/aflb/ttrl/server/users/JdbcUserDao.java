@@ -4,30 +4,28 @@ import com.aflb.ttrl.api.server.model.UserItem;
 import com.aflb.ttrl.server.ResourceUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @ConditionalOnProperty(name = "ttrl.dao.type", havingValue = "jdbc")
 public class JdbcUserDao implements UserDao {
 
-    private static final RowMapper<UserItem> ROW_MAPPER = (rs, i) -> new UserItem()
-            .name(rs.getString("name"))
-            .discordId(rs.getString("discord_id"))
-            .high(rs.getInt("high"))
-            .losses(rs.getInt("losses"))
-            .wins(rs.getInt("wins"))
-            .picture(rs.getString("picture"));
+    private static final RowMapper<UserItem> ROW_MAPPER = new BeanPropertyRowMapper<>(UserItem.class);
 
     private final NamedParameterJdbcTemplate template;
     private final String sqlGetUsers;
     private final String sqlGetUser;
+    private final String sqlUserExists;
+    private final String sqlUserInsert;
     private final String sqlIncrementWins;
     private final String sqlIncrementLosses;
     private final String sqlUpdateHigh;
@@ -37,6 +35,8 @@ public class JdbcUserDao implements UserDao {
         this.template = template;
         this.sqlGetUsers = ResourceUtils.loadSqlResourceContents(database, "user__select_all.sql");
         this.sqlGetUser = ResourceUtils.loadSqlResourceContents(database, "user__select.sql");
+        this.sqlUserExists = ResourceUtils.loadSqlResourceContents(database, "user__exists.sql");
+        this.sqlUserInsert = ResourceUtils.loadSqlResourceContents(database, "user__insert.sql");
         this.sqlIncrementLosses = ResourceUtils.loadSqlResourceContents(database, "user__update_increment_losses.sql");
         this.sqlIncrementWins = ResourceUtils.loadSqlResourceContents(database, "user__update_increment_wins.sql");
         this.sqlUpdateHigh = ResourceUtils.loadSqlResourceContents(database, "user__update_high.sql");
@@ -49,13 +49,27 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public UserItem getUser(String discordId) {
-        return template.queryForObject(sqlGetUser, new MapSqlParameterSource("discord_id", discordId), ROW_MAPPER);
+    public Optional<UserItem> getUser(String discordId) {
+        try {
+            return Optional.ofNullable(template.queryForObject(
+                    sqlGetUser, new MapSqlParameterSource("discordId", discordId), ROW_MAPPER));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public boolean isUserExists(String discordId) {
+        return template.queryForObject(sqlUserExists, discordIdParamSource(discordId), Integer.class) > 0;
     }
 
     @Override
     public boolean addUser(UserItem user) {
-        return false;
+        if (isUserExists(user.getDiscordId())) {
+            return false;
+        }
+
+        return template.update(sqlUserInsert, new BeanPropertySqlParameterSource(user)) == 1;
     }
 
     @Override
@@ -65,25 +79,29 @@ public class JdbcUserDao implements UserDao {
 
     @Override
     public void incrementWins(String discordId) {
-        template.update(sqlIncrementWins, new MapSqlParameterSource("discord_id", discordId));
+        template.update(sqlIncrementWins, discordIdParamSource(discordId));
     }
 
     @Override
     public void incrementLosses(String discordId) {
-        template.update(sqlIncrementLosses, new MapSqlParameterSource("discord_id", discordId));
+        template.update(sqlIncrementLosses, discordIdParamSource(discordId));
     }
 
     @Override
     public void updateHighScore(String discordId, int score) {
-        template.update(sqlUpdateHigh, new MapSqlParameterSource()
-                .addValue("discord_id", discordId)
-                .addValue("high", score));
+        template.update(
+                sqlUpdateHigh,
+                discordIdParamSource(discordId).addValue("high", score));
     }
 
     @Override
     public void updatePicture(String discordId, String picture) {
-        template.update(sqlUpdatePicture, new MapSqlParameterSource()
-                .addValue("discord_id", discordId)
-                .addValue("picture", picture));
+        template.update(
+                sqlUpdatePicture,
+                discordIdParamSource(discordId).addValue("picture", picture));
+    }
+
+    private MapSqlParameterSource discordIdParamSource(String discordId) {
+        return new MapSqlParameterSource("discordId", discordId);
     }
 }

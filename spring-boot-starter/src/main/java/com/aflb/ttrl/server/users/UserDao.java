@@ -3,11 +3,14 @@ package com.aflb.ttrl.server.users;
 import com.aflb.ttrl.api.server.model.UserItem;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDao {
     List<UserItem> getUsers();
 
-    UserItem getUser(String discordId);
+    Optional<UserItem> getUser(String discordId);
+
+    boolean isUserExists(String discordId);
 
     boolean addUser(UserItem user);
 

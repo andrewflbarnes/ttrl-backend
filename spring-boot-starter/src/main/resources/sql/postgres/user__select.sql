@@ -5,4 +5,4 @@ SELECT name
      , high
      , picture
   FROM ttrl_users
- WHERE discord_id = :discord_id
+ WHERE discord_id = :discordId
