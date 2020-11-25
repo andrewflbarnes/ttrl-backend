@@ -1,4 +1,4 @@
-package com.aflb.ttrl.server.users.auto;
+package com.aflb.ttrl.server.users.autoconfiguration;
 
 import com.aflb.ttrl.api.server.model.UserItem;
 import com.aflb.ttrl.server.users.UserDao;

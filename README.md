@@ -13,7 +13,7 @@ mvn clean install
 ### Running
 
 The backend can be run in a couple of ways
-- (TODO) Run the war/jar generated in the `spring-boot-standalone` module
+- Run the war generated in the `server` module e.g `java -jar .../ttrl-server.war`
 - Import the generated `ttrl-spring-boot-starter` lib into an existing Spring Boot application as a dependency
 
 ### Configuration
@@ -29,28 +29,23 @@ NOTE: No DB libraries are provided by default in the `spring-boot-starter` modul
 
 ### Local testing
 
-To test locally some SQL and a docker-compose file are provided for convenience. The [SQL](./test.sql) also reflects
-the expected table/view structure. By default the DB is exposed on port `5555` with `postgres` as the DB, username and
+To test locally some SQL and a docker-compose file are provided for convenience. The [SQL](./test/test.sql) also reflects
+the expected table/view structure. By default the DB is exposed on port `5432` with `postgres` as the DB, username and
 password.
 
 ```bash
+cd test
+
 doocker-compose up -d
 
-psql -h localhost -p 5555 postgres postgres < test.sql
+psql -h localhost -p 5432 postgres postgres < test.sql
 ```
 
-Running the test `Application` class in `spring-boot-starter` will start an instance running which connects to this DB.
-(TODO) Alternatively run the backend standalone or embedded with the below settings:
-```yaml
-spring:
-  datasource:
-    url: "jdbc:postgresql://localhost:5555/postgres?user=postgres&password=postgres"
+Run the `server` standalone.
+```bash
+cd server/target
 
-ttrl:
-  dao:
-    type: jdbc
-    database: postgres
-
+java -jar ttrl-server*.war
 ```
 
 User details can be retrieved using the below (port `8088` assuming the test `Application` class is used):

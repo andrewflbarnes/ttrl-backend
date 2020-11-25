@@ -13,6 +13,7 @@
     <modules>
         <module>api</module>
         <module>spring-boot-starter</module>
+        <module>server</module>
     </modules>
 
     <scm>
@@ -41,6 +42,8 @@
 
         <lombok.version>1.18.6</lombok.version>
         <commons-io.version>2.6</commons-io.version>
+        <logback.version>1.2.3</logback.version>
+        <postgres.version>42.2.5</postgres.version>
     </properties>
 
     <dependencyManagement>
@@ -72,6 +75,18 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgres.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
