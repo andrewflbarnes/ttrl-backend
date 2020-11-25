@@ -1,4 +1,5 @@
 SELECT name
+     , discord_id
      , wins
      , losses
      , high

@@ -16,31 +16,140 @@ tags:
 paths:
   /users:
     get:
+      operationId: getUsers
       responses:
         200:
-          description: 200 response containing user details
+          description: Users found and details returned
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserList"
+    post:
+      operationId: addUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        201:
+          description: User successfully created
+          headers:
+            location:
+              description: Location of the created resource
+              schema:
+                type: string
+        409:
+          description: User already exists
+  /users/{discordId}:
+    parameters:
+    - in: path
+      name: discordId
+      schema:
+        type: string
+      required: true
+      description: Discord ID of the user to update/get
+    get:
+      operationId: getUser
+      responses:
+        200:
+          description: User found and details returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserItem"
+    put:
+      operationId: updateUserFull
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        204:
+          description: User successfully updated
+        400:
+          $ref: "#/components/responses/BadRequest"
+    patch:
+      operationId: updateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserOperation"
+      responses:
+        204:
+          description: User successfully updated
+        400:
+          $ref: "#/components/responses/BadRequest"
 components:
+  responses:
+    BadRequest:
+      description: request submitted was invalid
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
   schemas:
+    ErrorResponse:
+      type: object
+      required:
+      - reason
+      properties:
+        reason:
+          type: string
+          example: "Invalid discrod ID: sajkfghe80he3r0hi2e"
+    UserOperation:
+      type: object
+      required:
+      - secret
+      - operation
+      properties:
+        secret:
+          type: string
+          example: "0123456789ABCDEF0123456789ABCDEF"
+        operation:
+          type: string
+          enum: [win, lose, high, picture]
+          example: high
+        opval:
+          type: string
+          example: "116"
+    UserUpdate:
+      allOf:
+      - $ref: "#/components/schemas/UserItem"
+      - type: object
+        required:
+        - secret
+        properties:
+          secret:
+            type: string
+            example: "0123456789ABCDEF0123456789ABCDEF"
     UserItem:
+      type: object
       required:
       - name
-      type: "object"
+      - discordId
       properties:
+        discordId:
+          type: string
+          example: Barnesly#1234
         name:
-          type: "string"
+          type: string
+          example: Barnesly
         wins:
           type: integer
+          example: 5
         losses:
           type: integer
+          example: 3
         high:
           type: integer
+          example: 116
         picture:
           type: string
+          example: "https://nerdist.com/wp-content/uploads/2020/07/maxresdefault.jpg"
     UserList:
-      type: "array"
+      type: array
       items:
-        $ref: "#/components/schema/UserItem"
+        $ref: "#/components/schemas/UserItem"
