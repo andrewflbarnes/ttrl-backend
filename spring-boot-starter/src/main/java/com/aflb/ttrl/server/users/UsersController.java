@@ -44,7 +44,7 @@ public class UsersController implements UsersApi {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid API secret");
         }
 
-        return null;
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     @Override
@@ -64,6 +64,6 @@ public class UsersController implements UsersApi {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid API secret");
         }
 
-        return null;
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }
