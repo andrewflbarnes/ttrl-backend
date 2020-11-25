@@ -1,14 +1,11 @@
-package com.aflb.ttrl.server.users;
+package com.aflb.ttrl.server.users.auto;
 
 import com.aflb.ttrl.api.server.model.UserItem;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
-import org.springframework.stereotype.Component;
+import com.aflb.ttrl.server.users.UserDao;
 
 import java.util.Arrays;
 import java.util.List;
 
-@Component
-@ConditionalOnMissingClass
 public class DummyUserDao implements UserDao {
 
     private static final List<UserItem> USERS = Arrays.asList(

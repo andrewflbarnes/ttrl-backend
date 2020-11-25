@@ -1,0 +1,10 @@
+server.port: 8088
+
+spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5555/postgres?user=postgres&password=postgres}
+
+ttrl:
+  dao:
+    type: jdbc
+    database: postgres

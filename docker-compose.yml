@@ -1,0 +1,15 @@
+version: "3.5"
+services:
+  kaas-database:
+    container_name: ttrl-db
+    image: postgres:10
+    ports:
+    - "5555:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+
+networks:
+  default:
+    name: ttrl
