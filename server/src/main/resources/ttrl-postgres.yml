@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${TTRL_DB_URL:jdbc:postgresql://localhost:5432/postgres}
-    username: ${TTRL_DB_USER:postgres}
-    password: ${TTRL_DB_PASS:postgres}
+    url: ${TTRL_DB_URL:jdbc:postgresql://localhost:5432/postgres?currentSchema=ttrl}
+    username: ${TTRL_DB_USER:ttrl_user}
+    password: ${TTRL_DB_PASS:password}
     driverClassName: org.postgresql.Driver
     hikari:
       connectionTimeout: 1000

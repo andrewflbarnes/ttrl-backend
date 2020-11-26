@@ -67,12 +67,15 @@ public class UsersController implements UsersApi {
     public ResponseEntity<Void> updateUser(String discordId, UserOperation op) {
         secret.validateThrow(op.getSecret());
 
-        switch (op.getOperation()) {
+
+        String opval = op.getOpval();
+        UserOperation.OperationEnum optype = op.getOperation();
+
+        switch (optype) {
             case WIN:
                 userService.incrementWins(discordId);
                 break;
             case HIGH:
-                String opval = op.getOpval();
                 try {
                     userService.updateHighScore(discordId, Integer.parseInt(opval));
                 } catch (NumberFormatException e) {
@@ -83,8 +86,10 @@ public class UsersController implements UsersApi {
                 userService.incrementLosses(discordId);
                 break;
             case PICTURE:
-                userService.updatePicture(discordId, op.getOpval());
+                userService.updatePicture(discordId, opval);
                 break;
+            default:
+                throw new UnsupportedOperationException("Operation not supported: " + optype);
         }
 
         return ResponseEntity.noContent().build();

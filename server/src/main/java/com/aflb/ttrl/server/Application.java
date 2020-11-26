@@ -33,9 +33,11 @@ public class Application {
         public Reporter(BuildProperties buildProps, TtrlReporter ttrlReporter) {
             final String version = buildProps.getVersion();
             final String commit = buildProps.getCommit();
+
             final String versionLog = String.format(TEMPLATE,
                     "VERSION",
                     String.format("%s (%s)", version, commit));
+
             if (BuildProperties.UNKNOWN.equals(version) || BuildProperties.UNKNOWN.equals(commit)) {
                 log.warn(versionLog);
             } else {
