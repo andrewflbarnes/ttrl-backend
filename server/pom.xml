@@ -68,6 +68,10 @@
                             <goal>revision</goal>
                         </goals>
                         <phase>initialize</phase>
+                        <configuration>
+                            <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                            <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
