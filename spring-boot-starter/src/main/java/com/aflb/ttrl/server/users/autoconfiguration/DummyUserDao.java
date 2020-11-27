@@ -80,4 +80,9 @@ public class DummyUserDao implements UserDao {
     public void updatePicture(String discordId, String picture) {
         throw new UnsupportedOperationException("Updating users not supported");
     }
+
+    @Override
+    public void updateName(String discordId, String name) {
+        throw new UnsupportedOperationException("Updating users not supported");
+    }
 }

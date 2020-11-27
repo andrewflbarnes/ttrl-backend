@@ -30,6 +30,7 @@ public class JdbcUserDao implements UserDao {
     private final String sqlIncrementLosses;
     private final String sqlUpdateHigh;
     private final String sqlUpdatePicture;
+    private final String sqlUpdateName;
 
     public JdbcUserDao(NamedParameterJdbcTemplate template, @Qualifier("database") String database) {
         this.template = template;
@@ -41,6 +42,7 @@ public class JdbcUserDao implements UserDao {
         this.sqlIncrementWins = ResourceUtils.loadSqlResourceContents(database, "user__update_increment_wins.sql");
         this.sqlUpdateHigh = ResourceUtils.loadSqlResourceContents(database, "user__update_high.sql");
         this.sqlUpdatePicture = ResourceUtils.loadSqlResourceContents(database, "user__update_picture.sql");
+        this.sqlUpdateName = ResourceUtils.loadSqlResourceContents(database, "user__update_name.sql");
     }
 
     @Override
@@ -99,6 +101,13 @@ public class JdbcUserDao implements UserDao {
         template.update(
                 sqlUpdatePicture,
                 discordIdParamSource(discordId).addValue("picture", picture));
+    }
+
+    @Override
+    public void updateName(String discordId, String name) {
+        template.update(
+                sqlUpdateName,
+                discordIdParamSource(discordId).addValue("name", name));
     }
 
     private MapSqlParameterSource discordIdParamSource(String discordId) {

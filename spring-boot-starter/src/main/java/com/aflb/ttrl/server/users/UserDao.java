@@ -23,4 +23,6 @@ public interface UserDao {
     void updateHighScore(String discordId, int score);
 
     void updatePicture(String discordId, String picture);
+
+    void updateName(String discordId, String name);
 }

@@ -131,7 +131,7 @@ components:
           example: "0123456789ABCDEF0123456789ABCDEF"
         operation:
           type: string
-          enum: [win, lose, high, picture]
+          enum: [win, lose, high, picture, name]
           example: high
         opval:
           type: string

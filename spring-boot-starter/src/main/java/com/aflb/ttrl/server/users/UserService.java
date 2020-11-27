@@ -39,6 +39,10 @@ public class UserService {
         userDao.updatePicture(discordId, picture);
     }
 
+    public void updateName(String discordId, String name) {
+        userDao.updateName(discordId, name);
+    }
+
     public boolean addUser(UserItem user) {
         return userDao.addUser(user);
     }

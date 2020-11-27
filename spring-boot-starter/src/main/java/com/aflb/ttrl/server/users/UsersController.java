@@ -88,6 +88,9 @@ public class UsersController implements UsersApi {
             case PICTURE:
                 userService.updatePicture(discordId, opval);
                 break;
+            case NAME:
+                userService.updateName(discordId, opval);
+                break;
             default:
                 throw new UnsupportedOperationException("Operation not supported: " + optype);
         }
