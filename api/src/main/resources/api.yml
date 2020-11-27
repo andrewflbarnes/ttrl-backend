@@ -161,15 +161,18 @@ components:
         wins:
           type: integer
           example: 5
+          default: 0
         losses:
           type: integer
           example: 3
+          default: 0
         high:
           type: integer
           example: 116
+          default: 0
         picture:
           type: string
-          example: "https://nerdist.com/wp-content/uploads/2020/07/maxresdefault.jpg"
+          example: "https://i.pinimg.com/originals/21/49/9d/21499dba0eec71730fdaa0534a82e163.jpg"
     UserList:
       type: array
       items:
